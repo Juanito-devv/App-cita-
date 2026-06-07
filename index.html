@@ -64,7 +64,6 @@
             margin-bottom: 25px;
         }
 
-        /* Animación para los emojis grandes */
         .gif-placeholder {
             font-size: 4rem;
             display: inline-block;
@@ -81,7 +80,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Estilos para las fotos */
         .foto-inicio {
             width: 180px;
             height: 180px;
@@ -102,7 +100,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        /* Botones */
         .btn-group {
             display: flex;
             justify-content: center;
@@ -142,7 +139,7 @@
             background: #7e6b70;
             color: white;
             position: relative;
-            transition: all 0.15s ease;
+            transition: all 0.12s ease;
         }
 
         .action-btn {
@@ -157,7 +154,6 @@
             box-shadow: 0 8px 20px rgba(74, 139, 140, 0.3);
         }
 
-        /* Formulario */
         .form-control {
             margin-bottom: 20px;
             text-align: left;
@@ -187,7 +183,6 @@
             border-color: #b84a6c;
         }
 
-        /* Opciones de lugar */
         .options-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -217,7 +212,6 @@
             color: white;
         }
 
-        /* Aviso visible */
         .aviso-visible {
             background-color: #e1f5fe;
             border-left: 5px solid #0288d1;
@@ -260,7 +254,6 @@
             color: #b84a6c;
         }
 
-        /* Corazones flotantes */
         .heart-particle {
             position: fixed;
             pointer-events: none;
@@ -281,7 +274,6 @@
 <body>
 
 <div class="card">
-    <!-- PASO 1: PREGUNTA con tu foto -->
     <div id="step-1" class="step active">
         <img class="foto-inicio" src="yo.jpeg" alt="Mi foto" onerror="this.src='https://placehold.co/180x180?text=Foto+mia'">
         <h2>¿Me harías el honor de aceptar una cita conmigo?</h2>
@@ -292,7 +284,6 @@
         </div>
     </div>
 
-    <!-- PASO 2: AGRADECIMIENTO -->
     <div id="step-2" class="step">
         <div class="gif-placeholder">🥰</div>
         <h2>Gracias por decir que sí, no esperaba menos de ti</h2>
@@ -300,7 +291,6 @@
         <button class="action-btn" onclick="goToStep(3)">¿Cuándo? 🗓️</button>
     </div>
 
-    <!-- PASO 3: FECHA Y HORA -->
     <div id="step-3" class="step">
         <div class="gif-placeholder">📅</div>
         <h2>¿Qué día y hora nos damos un besito?</h2>
@@ -315,7 +305,6 @@
         <button class="action-btn" onclick="validateStep3()">¿Dónde? 📍</button>
     </div>
 
-    <!-- PASO 4: LUGAR con aviso visible -->
     <div id="step-4" class="step">
         <div class="gif-placeholder">🗺️</div>
         <h2>¿A dónde te gustaría que vayamos?</h2>
@@ -340,7 +329,6 @@
         <button class="action-btn" style="margin-top: 20px;" onclick="validateStep4()">FIN 💝</button>
     </div>
 
-    <!-- PASO 5: RESUMEN Y ENVÍO con foto de nosotros -->
     <div id="step-5" class="step">
         <div class="gif-placeholder">💝</div>
         <h2>¡Todo listo, mi amor!</h2>
@@ -368,16 +356,13 @@
 
     const btnNo = document.getElementById('main-no');
 
-    // Movimiento MÁS ÁGIL pero sin ser brusco
-    function subtleEscape() {
+    function aggressiveEscape() {
         if (!btnNo) return;
-        // Reduce el tamaño más rápido (hasta 0.5)
-        scaleNo -= 0.08;
-        if (scaleNo < 0.5) scaleNo = 0.5;
+        scaleNo -= 0.18;
+        if (scaleNo < 0.3) scaleNo = 0.3;
         btnNo.style.transform = "scale(" + scaleNo + ")";
         
-        // Mayor desplazamiento: hasta 35px
-        const maxOffset = 35;
+        const maxOffset = 55;
         const offsetX = (Math.random() - 0.5) * maxOffset * 2;
         const offsetY = (Math.random() - 0.5) * maxOffset * 2;
         
@@ -385,23 +370,21 @@
         btnNo.style.left = offsetX + "px";
         btnNo.style.top = offsetY + "px";
         
-        // Regresa al centro un poco más rápido (cada 4 intentos)
         noMoveCount++;
-        if (noMoveCount > 4) {
+        if (noMoveCount > 2) {
             setTimeout(function() {
                 if (btnNo) {
                     btnNo.style.left = "0px";
                     btnNo.style.top = "0px";
                 }
-            }, 250);
+            }, 180);
             noMoveCount = 0;
         }
     }
 
-    // Eventos: mouse y táctil
     if (btnNo) {
-        btnNo.addEventListener('mouseenter', subtleEscape);
-        btnNo.addEventListener('touchstart', subtleEscape);
+        btnNo.addEventListener('mouseenter', aggressiveEscape);
+        btnNo.addEventListener('touchstart', aggressiveEscape);
     }
 
     function goToStep(stepNum) {
