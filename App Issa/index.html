@@ -85,16 +85,15 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        /* Botones y contenedor */
+        /* Botones */
         .btn-group {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 40px;  /* Más separación */
+            gap: 40px;
             margin-top: 20px;
             min-height: 80px;
             position: relative;
-            background: transparent;
         }
 
         button, .next-btn {
@@ -109,13 +108,11 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
         }
 
         .btn-yes {
             background: #b84a6c;
             color: white;
-            transition: transform 0.2s;
         }
 
         .btn-yes:hover {
@@ -127,8 +124,8 @@
         .btn-no {
             background: #7e6b70;
             color: white;
-            position: relative;  /* Ahora es relativo para movimiento sutil */
-            transition: all 0.1s ease;
+            position: relative;
+            transition: all 0.15s ease;
         }
 
         .action-btn {
@@ -267,9 +264,9 @@
 <body>
 
 <div class="card">
-    <!-- PASO 1: LA PREGUNTA -->
+    <!-- PASO 1: PREGUNTA con tu foto -->
     <div id="step-1" class="step active">
-        <!-- AQUÍ PON LA RUTA DE TU FOTO: cambia 'tu_foto.jpg' por el nombre de tu imagen -->
+        <!-- 👇 CAMBIA "tu_foto.jpg" por la ruta de tu imagen -->
         <img class="foto-inicio" src="tu_foto.jpg" alt="Mi foto" onerror="this.src='https://via.placeholder.com/180?text=Foto+mia'">
         <h2>¿Me harías el honor de aceptar una cita conmigo?</h2>
         <p>Piénsalo bien... Siempre puedes hacer click en no ):</p>
@@ -283,11 +280,11 @@
     <div id="step-2" class="step">
         <span class="gif-placeholder">🥰</span>
         <h2>Gracias por decir que sí, no esperaba menos de ti</h2>
-        <p>Ahora vamos a coordinar todo juntos va?</p>
-        <button class="action-btn" onclick="goToStep(3)">¿Cuando? 🗓️</button>
+        <p>Ahora vamos a coordinar todo juntos ¿va?</p>
+        <button class="action-btn" onclick="goToStep(3)">¿Cuándo? 🗓️</button>
     </div>
 
-    <!-- PASO 3: CALENDARIO -->
+    <!-- PASO 3: FECHA Y HORA -->
     <div id="step-3" class="step">
         <span class="gif-placeholder">📅</span>
         <h2>¿Qué día y hora nos damos un besito?</h2>
@@ -299,18 +296,17 @@
             <label for="time-input">Selecciona la Hora:</label>
             <input type="time" id="time-input">
         </div>
-        <button class="action-btn" id="btn-date-next" onclick="validateStep3()">¿Donde? 📍</button>
+        <button class="action-btn" onclick="validateStep3()">¿Dónde? 📍</button>
     </div>
 
-    <!-- PASO 4: LUGAR -->
+    <!-- PASO 4: LUGAR con aviso visible -->
     <div id="step-4" class="step">
         <span class="gif-placeholder">🗺️</span>
         <h2>¿A dónde te gustaría que vayamos?</h2>
         
-        <!-- Aviso visible pedido -->
         <div class="aviso-visible">
             <span>💡</span>
-            <span><strong>Puedes seleccionar "Otros" y escribir tu propio plan ideal</strong> — ¡así lo hacemos juntos!</span>
+            <span><strong>Puedes seleccionar "Otros" y escribir tu propio plan ideal</strong> — así lo hacemos juntos.</span>
         </div>
 
         <div class="options-grid">
@@ -328,13 +324,13 @@
         <button class="action-btn" style="margin-top: 20px;" onclick="validateStep4()">FIN 💝</button>
     </div>
 
-    <!-- PASO 5: MENSAJE FINAL Y ENVÍO -->
+    <!-- PASO 5: RESUMEN Y ENVÍO con foto de nosotros -->
     <div id="step-5" class="step">
         <span class="gif-placeholder">💝</span>
         <h2>¡Todo listo, mi amor!</h2>
         <p>Me hace muy feliz saber que sí saldremos, mi corazón de melocotón.</p>
 
-        <!-- Foto de nosotros (página final) -->
+        <!-- 👇 CAMBIA "foto_nosotros.jpg" por la foto de los dos -->
         <img class="foto-nosotros" src="foto_nosotros.jpg" alt="Nosotros" onerror="this.src='https://via.placeholder.com/200?text=Foto+de+nosotros'">
         
         <div class="summary-box">
@@ -356,61 +352,60 @@
     let noMoveCount = 0;
 
     const btnNo = document.getElementById('main-no');
-    const containerVoid = document.getElementById('question-void');
     const btnYes = document.getElementById('main-yes');
 
-    // Movimiento sutil del botón NO (no salta fuerte a los lados)
+    // Movimiento SUTIL del botón NO (no salta fuerte a los lados)
     function subtleEscape() {
         if (!btnNo) return;
-        // Reducir tamaño muy gradualmente (más sutil)
+        // Encoge un poco
         scaleNo -= 0.05;
-        if (scaleNo < 0.6) scaleNo = 0.6;  // no desaparece, solo se encoge hasta 60%
-        btnNo.style.transform = scale(${scaleNo});
+        if (scaleNo < 0.65) scaleNo = 0.65;
+        btnNo.style.transform = "scale(" + scaleNo + ")";
         
-        // Movimiento dentro del contenedor .btn-group (sin salirse de la pantalla)
-        // Solo desplazamiento relativo pequeño: entre -15px y 15px en X y Y
-        const maxOffset = 20;
+        // Movimiento pequeño dentro del contenedor (máximo 20px)
+        const maxOffset = 18;
         const offsetX = (Math.random() - 0.5) * maxOffset * 2;
         const offsetY = (Math.random() - 0.5) * maxOffset * 2;
         
         btnNo.style.position = 'relative';
-        btnNo.style.left = ${offsetX}px;
-        btnNo.style.top = ${offsetY}px;
+        btnNo.style.left = offsetX + "px";
+        btnNo.style.top = offsetY + "px";
         
-        // Pequeño efecto visual de "rechazo" sin ser brusco
-        btnNo.style.transition = 'all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
-        
-        // Cada cierto intentos, el botón regresa un poco al centro para no ser imposible
+        // Cada cierto tiempo regresa al centro para que no sea imposible
         noMoveCount++;
-        if (noMoveCount > 8) {
-            setTimeout(() => {
+        if (noMoveCount > 6) {
+            setTimeout(function() {
                 if (btnNo) {
-                    btnNo.style.left = '0px';
-                    btnNo.style.top = '0px';
-                    btnNo.style.transform = scale(${scaleNo});
+                    btnNo.style.left = "0px";
+                    btnNo.style.top = "0px";
                 }
-            }, 400);
+            }, 350);
             noMoveCount = 0;
         }
     }
 
-    // Eventos para el botón NO: mouseenter y touchstart (móvil)
-    btnNo.addEventListener('mouseenter', subtleEscape);
-    btnNo.addEventListener('touchstart', subtleEscape);
+    // Asignar eventos
+    if (btnNo) {
+        btnNo.addEventListener('mouseenter', subtleEscape);
+        btnNo.addEventListener('touchstart', subtleEscape);
+    }
 
     function goToStep(stepNum) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById(step-${stepNum}).classList.add('active');
+        var steps = document.querySelectorAll('.step');
+        for (var i = 0; i < steps.length; i++) {
+            steps[i].classList.remove('active');
+        }
+        document.getElementById('step-' + stepNum).classList.add('active');
         currentStep = stepNum;
-        if(stepNum === 2) {
+        if (stepNum === 2) {
             launchHearts();
         }
     }
 
     function validateStep3() {
-        const date = document.getElementById('date-input').value;
-        const time = document.getElementById('time-input').value;
-        if(!date || !time) {
+        var date = document.getElementById('date-input').value;
+        var time = document.getElementById('time-input').value;
+        if (!date || !time) {
             alert("Por favor, selecciona una fecha y una hora mi amor.");
             return;
         }
@@ -419,10 +414,14 @@
 
     function selectPlace(place, element) {
         selectedPlace = place;
-        document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+        var allOptions = document.querySelectorAll('.option-card');
+        for (var i = 0; i < allOptions.length; i++) {
+            allOptions[i].classList.remove('selected');
+        }
         element.classList.add('selected');
-        const customContainer = document.getElementById('custom-plan-container');
-        if(place === 'Otros') {
+        
+        var customContainer = document.getElementById('custom-plan-container');
+        if (place === 'Otros') {
             customContainer.style.display = 'block';
         } else {
             customContainer.style.display = 'none';
@@ -430,55 +429,58 @@
     }
 
     function validateStep4() {
-        if(!selectedPlace) {
+        if (!selectedPlace) {
             alert("Por favor, selecciona una opción de lugar o propón la tuya en 'Otros'. 📍");
             return;
         }
-        let finalPlace = selectedPlace;
-        if(selectedPlace === 'Otros') {
-            const customText = document.getElementById('custom-plan').value.trim();
-            if(!customText) {
+        var finalPlace = selectedPlace;
+        if (selectedPlace === 'Otros') {
+            var customText = document.getElementById('custom-plan').value.trim();
+            if (!customText) {
                 alert("Escribe el plan que tienes en mente en el cuadro de texto. ✨");
                 return;
             }
-            finalPlace = Otros (${customText});
+            finalPlace = "Otros (" + customText + ")";
         }
-        // Llenar resumen
-        const rawDate = document.getElementById('date-input').value;
-        const formattedDate = rawDate.split('-').reverse().join('/');
+        
+        var rawDate = document.getElementById('date-input').value;
+        var parts = rawDate.split('-');
+        var formattedDate = parts[2] + '/' + parts[1] + '/' + parts[0];
         document.getElementById('summary-date').innerText = formattedDate;
         document.getElementById('summary-time').innerText = document.getElementById('time-input').value;
         document.getElementById('summary-place').innerText = finalPlace;
+        
         goToStep(5);
     }
 
     function sendData() {
-        const date = document.getElementById('summary-date').innerText;
-        const time = document.getElementById('summary-time').innerText;
-        const place = document.getElementById('summary-place').innerText;
+        var date = document.getElementById('summary-date').innerText;
+        var time = document.getElementById('summary-time').innerText;
+        var place = document.getElementById('summary-place').innerText;
         
-        // Mensaje bonito
-        const mensajeText = ¡Hola mi amor! ❤️ Aquí tienes la confirmación de nuestra cita:\n\n📅 *Fecha:* ${date}\n⏰ *Hora:* ${time}\n📍 *Lugar:* ${place}\n\n¡Te amo! Estoy ansioso por ese día. 🥰✨;
-        const encodedText = encodeURIComponent(mensajeText);
-        // Usamos el número que indicaste: +584129706050
-        const phoneNumber = "584129706050";
-        // Abrir WhatsApp con el número específico
-        window.open(https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedText}, '_blank');
+        var mensajeText = "¡Hola mi amor! ❤️ Aquí tienes la confirmación de nuestra cita:\n\n📅 *Fecha:* " + date + "\n⏰ *Hora:* " + time + "\n📍 *Lugar:* " + place + "\n\n¡Te amo! Estoy ansioso por ese día. 🥰✨";
+        var encodedText = encodeURIComponent(mensajeText);
+        var phoneNumber = "584129706050";
+        window.open("https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodedText, '_blank');
     }
 
     function launchHearts() {
-        for(let i=0; i<25; i++) {
-            setTimeout(() => {
-                const heart = document.createElement('div');
+        for (var i = 0; i < 25; i++) {
+            setTimeout(function(index) {
+                var heart = document.createElement('div');
                 heart.classList.add('heart-particle');
-                heart.innerHTML = ['❤️','💖','✨','🥰','💕'][Math.floor(Math.random()*5)];
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                var icons = ['❤️','💖','✨','🥰','💕'];
+                heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                heart.style.left = Math.random() * 100 + "vw";
+                var duration = (Math.random() * 2 + 2);
+                heart.style.animationDuration = duration + "s";
                 document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 4000);
-            }, i * 150);
+                setTimeout(function() { heart.remove(); }, 4000);
+            }, i * 150, i);
         }
     }
 </script>
+</body>
+</html>
 </body>
 </html>
