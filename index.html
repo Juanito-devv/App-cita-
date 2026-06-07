@@ -64,6 +64,23 @@
             margin-bottom: 25px;
         }
 
+        /* Animación para los emojis grandes */
+        .gif-placeholder {
+            font-size: 4rem;
+            display: inline-block;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.1); }
+            80% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
         /* Estilos para las fotos */
         .foto-inicio {
             width: 180px;
@@ -266,8 +283,7 @@
 <div class="card">
     <!-- PASO 1: PREGUNTA con tu foto -->
     <div id="step-1" class="step active">
-        <!-- 👇 CAMBIA "tu_foto.jpg" por la ruta de tu imagen -->
-        <img class="foto-inicio" src="yo.jpeg" alt="Mi foto" onerror="this.src='https://via.placeholder.com/180?text=Foto+mia'">
+        <img class="foto-inicio" src="yo.jpeg" alt="Mi foto" onerror="this.src='https://placehold.co/180x180?text=Foto+mia'">
         <h2>¿Me harías el honor de aceptar una cita conmigo?</h2>
         <p>Piénsalo bien... Siempre puedes hacer click en no ):</p>
         <div class="btn-group" id="question-void">
@@ -278,7 +294,7 @@
 
     <!-- PASO 2: AGRADECIMIENTO -->
     <div id="step-2" class="step">
-        <span class="gif-placeholder">🥰</span>
+        <div class="gif-placeholder">🥰</div>
         <h2>Gracias por decir que sí, no esperaba menos de ti</h2>
         <p>Ahora vamos a coordinar todo juntos ¿va?</p>
         <button class="action-btn" onclick="goToStep(3)">¿Cuándo? 🗓️</button>
@@ -286,7 +302,7 @@
 
     <!-- PASO 3: FECHA Y HORA -->
     <div id="step-3" class="step">
-        <span class="gif-placeholder">📅</span>
+        <div class="gif-placeholder">📅</div>
         <h2>¿Qué día y hora nos damos un besito?</h2>
         <div class="form-control">
             <label for="date-input">Selecciona la Fecha:</label>
@@ -301,7 +317,7 @@
 
     <!-- PASO 4: LUGAR con aviso visible -->
     <div id="step-4" class="step">
-        <span class="gif-placeholder">🗺️</span>
+        <div class="gif-placeholder">🗺️</div>
         <h2>¿A dónde te gustaría que vayamos?</h2>
         
         <div class="aviso-visible">
@@ -326,12 +342,11 @@
 
     <!-- PASO 5: RESUMEN Y ENVÍO con foto de nosotros -->
     <div id="step-5" class="step">
-        <span class="gif-placeholder">💝</span>
+        <div class="gif-placeholder">💝</div>
         <h2>¡Todo listo, mi amor!</h2>
         <p>Me hace muy feliz saber que sí saldremos, mi corazón de melocotón.</p>
 
-        <!-- 👇 CAMBIA "foto_nosotros.jpg" por la foto de los dos -->
-        <img class="foto-nosotros" src="nosotros.jpeg" alt="Nosotros" onerror="this.src='https://via.placeholder.com/200?text=Foto+de+nosotros'">
+        <img class="foto-nosotros" src="nosotros.jpeg" alt="Nosotros" onerror="this.src='https://placehold.co/200x200?text=Foto+de+nosotros'">
         
         <div class="summary-box">
             <div class="summary-item"><span class="summary-label">Fecha:</span> <span id="summary-date">-</span></div>
@@ -352,18 +367,17 @@
     let noMoveCount = 0;
 
     const btnNo = document.getElementById('main-no');
-    const btnYes = document.getElementById('main-yes');
 
-    // Movimiento SUTIL del botón NO (no salta fuerte a los lados)
+    // Movimiento MÁS ÁGIL pero sin ser brusco
     function subtleEscape() {
         if (!btnNo) return;
-        // Encoge un poco
-        scaleNo -= 0.05;
-        if (scaleNo < 0.65) scaleNo = 0.65;
+        // Reduce el tamaño más rápido (hasta 0.5)
+        scaleNo -= 0.08;
+        if (scaleNo < 0.5) scaleNo = 0.5;
         btnNo.style.transform = "scale(" + scaleNo + ")";
         
-        // Movimiento pequeño dentro del contenedor (máximo 20px)
-        const maxOffset = 18;
+        // Mayor desplazamiento: hasta 35px
+        const maxOffset = 35;
         const offsetX = (Math.random() - 0.5) * maxOffset * 2;
         const offsetY = (Math.random() - 0.5) * maxOffset * 2;
         
@@ -371,40 +385,36 @@
         btnNo.style.left = offsetX + "px";
         btnNo.style.top = offsetY + "px";
         
-        // Cada cierto tiempo regresa al centro para que no sea imposible
+        // Regresa al centro un poco más rápido (cada 4 intentos)
         noMoveCount++;
-        if (noMoveCount > 6) {
+        if (noMoveCount > 4) {
             setTimeout(function() {
                 if (btnNo) {
                     btnNo.style.left = "0px";
                     btnNo.style.top = "0px";
                 }
-            }, 350);
+            }, 250);
             noMoveCount = 0;
         }
     }
 
-    // Asignar eventos
+    // Eventos: mouse y táctil
     if (btnNo) {
         btnNo.addEventListener('mouseenter', subtleEscape);
         btnNo.addEventListener('touchstart', subtleEscape);
     }
 
     function goToStep(stepNum) {
-        var steps = document.querySelectorAll('.step');
-        for (var i = 0; i < steps.length; i++) {
-            steps[i].classList.remove('active');
-        }
+        document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
         document.getElementById('step-' + stepNum).classList.add('active');
-        currentStep = stepNum;
         if (stepNum === 2) {
             launchHearts();
         }
     }
 
     function validateStep3() {
-        var date = document.getElementById('date-input').value;
-        var time = document.getElementById('time-input').value;
+        const date = document.getElementById('date-input').value;
+        const time = document.getElementById('time-input').value;
         if (!date || !time) {
             alert("Por favor, selecciona una fecha y una hora mi amor.");
             return;
@@ -414,18 +424,11 @@
 
     function selectPlace(place, element) {
         selectedPlace = place;
-        var allOptions = document.querySelectorAll('.option-card');
-        for (var i = 0; i < allOptions.length; i++) {
-            allOptions[i].classList.remove('selected');
-        }
+        document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
         element.classList.add('selected');
         
-        var customContainer = document.getElementById('custom-plan-container');
-        if (place === 'Otros') {
-            customContainer.style.display = 'block';
-        } else {
-            customContainer.style.display = 'none';
-        }
+        const customContainer = document.getElementById('custom-plan-container');
+        customContainer.style.display = place === 'Otros' ? 'block' : 'none';
     }
 
     function validateStep4() {
@@ -433,9 +436,9 @@
             alert("Por favor, selecciona una opción de lugar o propón la tuya en 'Otros'. 📍");
             return;
         }
-        var finalPlace = selectedPlace;
+        let finalPlace = selectedPlace;
         if (selectedPlace === 'Otros') {
-            var customText = document.getElementById('custom-plan').value.trim();
+            const customText = document.getElementById('custom-plan').value.trim();
             if (!customText) {
                 alert("Escribe el plan que tienes en mente en el cuadro de texto. ✨");
                 return;
@@ -443,9 +446,9 @@
             finalPlace = "Otros (" + customText + ")";
         }
         
-        var rawDate = document.getElementById('date-input').value;
-        var parts = rawDate.split('-');
-        var formattedDate = parts[2] + '/' + parts[1] + '/' + parts[0];
+        const rawDate = document.getElementById('date-input').value;
+        const parts = rawDate.split('-');
+        const formattedDate = parts[2] + '/' + parts[1] + '/' + parts[0];
         document.getElementById('summary-date').innerText = formattedDate;
         document.getElementById('summary-time').innerText = document.getElementById('time-input').value;
         document.getElementById('summary-place').innerText = finalPlace;
@@ -454,29 +457,28 @@
     }
 
     function sendData() {
-        var date = document.getElementById('summary-date').innerText;
-        var time = document.getElementById('summary-time').innerText;
-        var place = document.getElementById('summary-place').innerText;
+        const date = document.getElementById('summary-date').innerText;
+        const time = document.getElementById('summary-time').innerText;
+        const place = document.getElementById('summary-place').innerText;
         
-        var mensajeText = "¡Hola mi amor! ❤️ Aquí tienes la confirmación de nuestra cita:\n\n📅 *Fecha:* " + date + "\n⏰ *Hora:* " + time + "\n📍 *Lugar:* " + place + "\n\n¡Te amo! Estoy ansioso por ese día. 🥰✨";
-        var encodedText = encodeURIComponent(mensajeText);
-        var phoneNumber = "584129706050";
+        const mensajeText = "¡Hola mi amor! ❤️ Aquí tienes la confirmación de nuestra cita:\n\n📅 *Fecha:* " + date + "\n⏰ *Hora:* " + time + "\n📍 *Lugar:* " + place + "\n\n¡Te amo! Estoy ansioso por ese día. 🥰✨";
+        const encodedText = encodeURIComponent(mensajeText);
+        const phoneNumber = "584129706050";
         window.open("https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodedText, '_blank');
     }
 
     function launchHearts() {
-        for (var i = 0; i < 25; i++) {
-            setTimeout(function(index) {
-                var heart = document.createElement('div');
+        for (let i = 0; i < 30; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
                 heart.classList.add('heart-particle');
-                var icons = ['❤️','💖','✨','🥰','💕'];
+                const icons = ['❤️','💖','✨','🥰','💕'];
                 heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
                 heart.style.left = Math.random() * 100 + "vw";
-                var duration = (Math.random() * 2 + 2);
-                heart.style.animationDuration = duration + "s";
+                heart.style.animationDuration = (Math.random() * 2 + 2) + "s";
                 document.body.appendChild(heart);
-                setTimeout(function() { heart.remove(); }, 4000);
-            }, i * 150, i);
+                setTimeout(() => heart.remove(), 4000);
+            }, i * 120);
         }
     }
 </script>
